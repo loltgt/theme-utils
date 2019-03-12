@@ -1,6 +1,6 @@
 <?php
 
-$paths = ['theme', 'codename'];
+$paths = ['theme', 'theme-codename'];
 $dirs = ['inc', '', 'page-templates', 'template-parts'];
 
 $priorities = [
