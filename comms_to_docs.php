@@ -418,7 +418,7 @@ foreach ($diri as $brs) {
 		if (! isset($docs[$three][$subthree][$i]))
 			$docs[$three][$subthree][$i] = $doc;
 
-		$file_url = "https://github.com/loltgt/{$path}/{$filename}";
+		$file_url = "https://github.com/loltgt/{$path}/blob/master/{$filename}";
 
 		$l = $index + 1;
 		$line_url = "{$file_url}#L{$l}";
