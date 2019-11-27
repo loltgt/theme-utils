@@ -9,19 +9,10 @@ $priorities = [
 	10 => 'theme:inc:class-theme-setup',
 	20 => 'theme:inc:class-theme-functions',
 	30 => 'theme:inc:class-theme-template',
-	40 => 'theme:inc:class-theme-layer',
-	41 => 'theme:inc:class-theme-layer-factory',
-	42 => 'theme:inc:class-theme-layer-cmb2',
-	43 => 'theme:inc:class-theme-layer-cfs',
-	44 => 'theme:inc:class-theme-layer-acfpro',
-	50 => 'theme:inc:class-theme-customizer',
-	60 => 'theme:inc:class-theme-shop-wc',
-	70 => 'theme:inc:class-widget-recent-posts',
-	80 => 'theme:inc:class-widget-recent-comments',
-	90 => 'theme:inc:class-theme-admin',
-	100 => 'theme:inc:class-theme-options',
-	110 => 'theme:inc:template-functions',
-	120 => 'theme:inc:template-tags'
+	40 => 'theme:inc:class-theme-admin',
+	50 => 'theme:inc:class-theme-options',
+	60 => 'theme:inc:template-functions',
+	70 => 'theme:inc:template-tags'
 ];
 
 
@@ -188,15 +179,15 @@ function pcbbl($line, $args = null) {
 
 	switch ($lc) {
 		case 'link':
-			$r = 'link to: [' . $line[1] . '](' . $line[1] . ')';
+			$r = "link to: [" . $line[1] . "](" . $line[1] . ")";
 		break;
 
 		case 'see':
-			$r = 'code refer to: ' . $line[1];
+			$r = "code refer to: *" . $line[1] . "*";
 		break;
 
 		case 'license':
-			$r = 'license: ' . $line[1];
+			$r = "license: " . $line[1];
 		break;
 
 		case 'access':
@@ -231,13 +222,13 @@ function pcbbl($line, $args = null) {
 			if (! empty($line[2]))
 				$r .= " " . $line[2];
 
-			if (! empty($line[3]))
-				$r .= "   default: " . str_replace("|", " or ", $line[3]);
+			if (! empty($line[4]))
+				$r .= "   reference: " . str_replace("|", " or ", $line[4]);
 		break;
 
 		case 'static':
-			$lc = 'type';
-			$r = 'static';
+			$lc = "type";
+			$r = "static";
 		break;
 
 		case 'since':
@@ -325,7 +316,7 @@ function slugify($text) {
 $diri = [];
 
 foreach ($paths as $path) {
-	$base = realpath(__DIR__ . '/../wp-content/themes/' . $path);
+	$base = realpath(__DIR__ . '/../../wp-content/themes/' . $path);
 
 	foreach ($dirs as $dir) {
 		$dirc = $base . '/' . $dir;
@@ -346,7 +337,7 @@ foreach ($diri as $brs) {
 	$path = $brs[0];
 	$filename = $brs[1];
 
-	$file = realpath(__DIR__ . '/../wp-content/themes/' . $path . '/' . $filename);
+	$file = realpath(__DIR__ . '/../../wp-content/themes/' . $path . '/' . $filename);
 
 	$source = file_get_contents($file);
 
@@ -395,6 +386,7 @@ foreach ($diri as $brs) {
 		}
 
 		if ($category == 'Hooks' || $category == 'Filters') {
+			$subthree = 0;
 			if ($three === 'Classes') $classname = null;
 			if (! strstr($f[0], 'theme_')) continue;
 		}
@@ -443,7 +435,7 @@ foreach ($diri as $brs) {
 
 
 
-$base = realpath('./docs');
+$base = realpath('../docs');
 
 $menu = [];
 
@@ -511,7 +503,8 @@ foreach ($docs as $three => $subthree) {
 
 			if ($text['category'] !== 'Classes') {
 				$node = $text['name'];
-				$anchor = urlencode($text['name']);
+				$anchor = str_replace('$', '', $text['name']);
+				$anchor = urlencode($anchor);
 
 				$body .= "## {$text['name']}\n\n";
 
@@ -567,7 +560,7 @@ foreach ($docs as $three => $subthree) {
 			}
 
 			if (isset($text['params'])) {
-				$params_label = ($text['category'] === 'Classes' ? "parameters" : "arguments");
+				$params_label = ($text['category'] === 'Classes' ? "properties" : "arguments");
 				$text['params'] = "{$params_label}: \n```php\n" . implode("\n", $text['params']) . "\n```\n";
 				$body .= "{$text['params']}\n\n";
 			}
